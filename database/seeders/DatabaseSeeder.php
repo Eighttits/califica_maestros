@@ -18,5 +18,36 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        \App\Models\User::create([
+            'name' => 'Admin',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'), // Cambia 'password' por la contraseña deseada
+            'role' => 'admin', // Asegúrate de tener el campo 'role' en tu tabla 'users'
+        ]);
+
+        \App\Models\User::create([
+            'name' => 'student 1',
+            'email' => 'student1@example.com',
+            'password' => bcrypt('password'), // Cambia 'password' por la contraseña deseada
+            'role' => 'student', // Asegúrate de tener el campo 'role' en tu tabla 'users'
+        ]);
+        \App\Models\User::create([
+            'name' => 'student 2',
+            'email' => 'student2@example.com',
+            'password' => bcrypt('password'), // Cambia 'password' por la contraseña deseada
+            'role' => 'student', // Asegúrate de tener el campo 'role' en tu tabla 'users'
+        ]);
+        \App\Models\User::create([
+            'name' => 'student 3',
+            'email' => 'student3@example.com',
+            'password' => bcrypt('password'), // Cambia 'password' por la contraseña deseada
+            'role' => 'student', // Asegúrate de tener el campo 'role' en tu tabla 'users'
+        ]);
+        \App\Models\User::create([
+            'name' => 'student 4',
+            'email' => 'student4@example.com',
+            'password' => bcrypt('password'), // Cambia 'password' por la contraseña deseada
+            'role' => 'student', // Asegúrate de tener el campo 'role' en tu tabla 'users'
+        ]);
     }
 }
