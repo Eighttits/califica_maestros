@@ -1,5 +1,5 @@
 <x-app-layout>
-    <style>
+        <style>
         .question {
 
             margin-bottom: 20px;
@@ -46,12 +46,42 @@
         
     </style>
     <x-slot name="header">
-        <!-- Encabezado -->
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Selecciona un formulario') }}
+        </h2>
     </x-slot>
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
+                @if(session('success'))
+                <div class="bg-green-200 text-green-800 p-4 mb-4" id="success-message">
+                    {{ session('success') }}
+                </div>
+                @endif
+                @if(session('error'))
+                    <div class="bg-red-200 text-red-800 p-4 mb-4" id="error-message">
+                        {{ session('error') }}
+                    </div>
+                @endif
+                <h3 class="text-lg font-semibold mb-4">{{ __('Selecciona un formulario') }}</h3>
+                <form action="{{ route('forms.statistics.select') }}" method="get">
+                    @csrf
+                    <label for="form_id" class="block text-gray-700 text-sm font-bold mb-2">Formulario:</label>
+                    <select name="form_id" id="form_id" class="block w-full p-2 border rounded-md">
+                        @foreach ($forms as $form)
+                            <option value="{{ $form->id }}">{{ $form->title }}</option>
+                        @endforeach
+                    </select>
+                    <button type="submit" class="mt-4 mb-5 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                        Ver Estadísticas
+                    </button>
+                </form>
+
+                @isset($statistics)
+                <div class="mt-5 border-t-4 border-black pt-5">
                 @foreach ($statistics as $question)
+                
                     @php
                         $totalResponses = collect($question['choices'])->sum('count');
                     @endphp
@@ -80,8 +110,29 @@
                         </div>
                         
                     </div>
+                
                 @endforeach
+                </div>
+                @endisset
             </div>
         </div>
     </div>
 </x-app-layout>
+<script>
+    // Función para ocultar el mensaje después de un tiempo
+    function hideMessage() {
+        var successMessage = document.getElementById('success-message');
+        var errorMessage = document.getElementById('error-message');
+
+        if (successMessage) {
+            successMessage.style.display = 'none';
+        }
+
+        if (errorMessage) {
+            errorMessage.style.display = 'none';
+        }
+    }
+
+    // Ocultar el mensaje después de 5 segundos (5000 milisegundos)
+    setTimeout(hideMessage, 5000);
+</script>

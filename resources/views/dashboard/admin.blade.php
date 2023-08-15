@@ -34,7 +34,7 @@
                     <a href="{{ route('add-techer-student') }}" class="block bg-blue-500 hover:bg-blue-600 focus:bg-blue-600 text-white font-semibold py-6 px-8 rounded transition duration-300 ease-in-out" style="background-color: #013C6E;">
                         Vincular Maestro con Estudiante
                     </a>
-                    <a href="#" class="block bg-blue-500 hover:bg-blue-600 focus:bg-blue-600 text-white font-semibold py-6 px-8 rounded transition duration-300 ease-in-out" style="background-color: #013C6E;">
+                    <a href="{{ route('forms.statistics.choices') }}" class="block bg-blue-500 hover:bg-blue-600 focus:bg-blue-600 text-white font-semibold py-6 px-8 rounded transition duration-300 ease-in-out" style="background-color: #013C6E;">
                         Ver Estadísticas
                     </a>
                 </div>

@@ -84,8 +84,28 @@ class FormController extends Controller
         return redirect()->route('forms.edit', $formId)->with('success', 'Formulario actualizado exitosamente.');
     }
 
+    public function showViewFormSelection()
+    {
+        $forms = Form::all();
+        return view('forms.select-form', compact('forms'));
+    }
+    
+    public function showFormSelection(Request $request)
+    {
+        $selectedFormId = $request->input('form_id');
+    
+        if ($selectedFormId) {
+            return redirect()->route('forms.statistics', ['formId' => $selectedFormId]);
+        } else {
+            return redirect()->route('forms.statistics.select')->with('error', 'Debes seleccionar un formulario.');
+        }
+    }
+    
+
+
     public function showStatistics($formId)
     {
+        $forms = Form::all();
         $form = Form::findOrFail($formId);
         $questions = $form->formQuestions;
     
@@ -110,7 +130,7 @@ class FormController extends Controller
             $statistics[] = $questionData;
         }
     
-        return view('forms.statistics', compact('form', 'statistics'));
+        return view('forms.select-form', compact('form', 'statistics', 'forms'));
     }
     
 

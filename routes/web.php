@@ -67,9 +67,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/forms', 'App\Http\Controllers\FormController@showForms')->name('forms.list')->middleware('can:admin');
     Route::get('/forms/{formId}/edit', 'App\Http\Controllers\FormController@editForm')->name('forms.edit')->middleware('can:admin');
     Route::put('/forms/{formId}', 'App\Http\Controllers\FormController@updateForm')->name('forms.update');
+    Route::get('/forms/load-statistics', 'App\Http\Controllers\FormController@showFormSelection')->name('forms.statistics.select');
     Route::get('/forms/{formId}/statistics', 'App\Http\Controllers\FormController@showStatistics')->name('forms.statistics');
-
-
+    Route::get('/forms/statistics', 'App\Http\Controllers\FormController@showViewFormSelection')->name('forms.statistics.choices');
 });
 
 
