@@ -24,7 +24,7 @@ class NewStudentRegistration extends Mailable
 
     public function build()
     {
-        return $this->view('emails.new-student-registration')
+        return $this->markdown('vendor.notifications.new-student-registration')
                     ->subject('Registro Exitoso');
     }
 }

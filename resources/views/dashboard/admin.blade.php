@@ -6,8 +6,8 @@
     </x-slot>
     
     <div class="flex justify-end mr-4 mb-4 mt-3">
-        <a href="{{ route('add-student') }}" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Agregar alumno</a>
-        <a href="{{ route('create-form') }}" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Agregar formulario</a>
+        <a href="{{ route('add-student') }}" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-green-600">Agregar estudiante</a>
+        <a href="{{ route('create-form') }}" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-green-600">Agregar formulario</a>
     </div>
     
     <div class="py-12">

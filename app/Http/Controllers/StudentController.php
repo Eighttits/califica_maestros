@@ -20,7 +20,25 @@ class StudentController extends Controller
         if (Gate::allows('student')) {
             $user = auth()->user(); // Obtén el usuario autenticado
             // Lógica y vista específica para el dashboard del estudiante
-            return view('dashboard.student', compact('user'));
+            $formsWithSubmission = [];
+            $formsWithoutSubmission = [];
+
+            foreach ($user->teachers as $teacher) {
+                foreach ($teacher->forms as $form) {
+                    $existingSubmission = Submission::where([
+                        'user_id' => $user->id,
+                        'form_id' => $form->id,
+                    ])->first();
+        
+                    if ($existingSubmission) {
+                        $formsWithSubmission[] = $form;
+                    }
+                    else{
+                        $formsWithoutSubmission[] = $form;
+                    }
+                }
+            }
+            return view('dashboard.student', compact('user','formsWithSubmission','formsWithoutSubmission'));
         } else {
             abort(403, 'No tienes permiso para acceder a esta página.');
         }
@@ -55,11 +73,12 @@ class StudentController extends Controller
         $student->save();
 
         // Asignar la contraseña temporal al usuario y guardarlo
-
+       
         // Enviar el correo electrónico
         Mail::to($student->email)->send(new NewStudentRegistration($student->email, $temporaryPassword));
+        return redirect()->route('admin.dashboard')->with('success', 'Estudiante agregado correctamente.');
 
-        return redirect()->route('add-student')->with('success', 'Estudiante agregado correctamente.');
+        
     }
 
     public function showStudentForm($formId)

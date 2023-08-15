@@ -21,17 +21,26 @@
 
                 <h3 class="font-semibold text-lg mb-4">Formularios asignados:</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    @foreach (auth()->user()->teachers as $teacher)
-                        @foreach ($teacher->forms as $form)
-                        <a href="{{ route('forms.student-form', ['formId' => $form->id]) }}">
-                            <div class="bg-green-500 hover:bg-green-600 focus:bg-green-600 font-semibold text-white p-4 rounded-lg">
+
+                        @foreach ($formsWithSubmission as $formW)
+                        <a href="{{ route('forms.student-form', ['formId' => $formW->id]) }}">
+                            <div class="bg-green-300 hover:bg-green-600 focus:bg-green-600 font-semibold text-white p-4 rounded-lg">
                                 
-                                    {{ $form->title }}
+                                    {{ $formW->title }} (Contestado)
                                
                             </div>
                         </a>
                         @endforeach
-                    @endforeach
+                        @foreach ($formsWithoutSubmission as $formWO)
+                        <a href="{{ route('forms.student-form', ['formId' => $formWO->id]) }}">
+                            <div class="bg-green-500 hover:bg-green-600 focus:bg-green-600 font-semibold text-white p-4 rounded-lg">
+                                
+                                    {{ $formWO->title }}
+                               
+                            </div>
+                        </a>
+                        @endforeach
+
                 </div>
             </div>
         </div>
