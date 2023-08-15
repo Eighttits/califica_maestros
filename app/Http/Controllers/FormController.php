@@ -8,9 +8,52 @@ use Illuminate\Http\Request;
 use App\Models\Form;
 use App\Models\FormQuestion;
 use App\Models\MultipleChoice;
+use App\Models\Teacher;
 
 class FormController extends Controller
 {
+
+    public function createForm(Request $request)
+    {
+        // Validar los datos del formulario (título, descripción, preguntas, respuestas)
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'teacher' => 'required|string|max:255', // Asegúrate de que el campo exista en tu formulario
+            'questions.*' => 'required|string|max:255',
+            'answers.*.*' => 'required|string|max:255',
+        ]);
+
+        // dd($validatedData);
+    
+        $teacher = new Teacher();
+        $teacher->name = $validatedData['teacher'];
+        $teacher->save();
+    
+        // Crear una nueva instancia de formulario y guardarla
+        $form = new Form();
+        $form->title = $validatedData['title'];
+        $form->description = $validatedData['description'];
+        $form->teacher_id = $teacher->id; // Asociar el maestro al formulario
+        $form->save();
+    
+        foreach ($validatedData['questions'] as $questionId => $questionText) {
+            $formQuestion = new FormQuestion();
+            $formQuestion->question = $questionText;
+            $formQuestion->form_id = $form->id; // Asociar la pregunta al formulario
+            $formQuestion->save();
+            
+            foreach ($validatedData['answers'][$questionId] as $answerText) {
+                $multipleChoice = new MultipleChoice();
+                $multipleChoice->answer = $answerText;
+                $multipleChoice->form_question_id = $formQuestion->id; // Asociar la respuesta a la pregunta
+                $multipleChoice->save();
+            }
+        }
+    
+        return redirect()->route('admin.dashboard')->with('success', 'Formulario creado Exitosamente.');
+    }
+
     public function saveSubmitForm($formId, Request $request)
     {
         // Obtén el usuario autenticado
@@ -40,7 +83,7 @@ class FormController extends Controller
     {
         $forms = Form::all();
 
-        return view('forms', compact('forms'));
+        return view('forms.forms-list', compact('forms'));
     }
 
     public function editForm($formId)
@@ -81,7 +124,7 @@ class FormController extends Controller
             }
         }
 
-        return redirect()->route('forms.edit', $formId)->with('success', 'Formulario actualizado exitosamente.');
+        return redirect()->route('forms.list')->with('success', 'Formulario actualizado exitosamente.');
     }
 
     public function showViewFormSelection()
@@ -132,6 +175,45 @@ class FormController extends Controller
     
         return view('forms.select-form', compact('form', 'statistics', 'forms'));
     }
+
+    public function destroy($id)
+    {
+        $form = Form::findOrFail($id);
+        // Realiza cualquier lógica necesaria antes de eliminar el formulario
+        $teacher = $form->teacher;
+        $teacher->students()->detach();
+
+        foreach ($form->submissions as $submission) {
+            // Elimina las respuestas de la submission
+            foreach ($submission->answerChoices as $answerChoice) {
+                $answerChoice->delete();
+            }
+            // Elimina la submission
+            $submission->delete();
+        }
+    
+        // Elimina las preguntas, opciones de respuesta y el formulario en sí
+        foreach ($form->formQuestions as $question) {
+            foreach ($question->multipleChoices as $choice) {
+                foreach ($choice->answerChoices as $answerChoice) {
+                    $answerChoice->delete();
+                }
+                $choice->delete();
+            }
+            $question->delete();
+        }
+
+
+        $teacher->forms()->delete(); // Elimina los formularios asociados al profesor
+
+        $teacher->delete();
+        // $form->teacher->delete();
+
+        $form->delete();
+
+        return redirect()->route('forms.list')->with('success', 'Formulario eliminado exitosamente.');
+    }
+
     
 
 

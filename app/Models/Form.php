@@ -23,4 +23,9 @@ class Form extends Model
     {
         return $this->hasMany(FormQuestion::class);
     }
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
+    }
 }

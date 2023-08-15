@@ -26,4 +26,6 @@ class Submission extends Model
         return $this->hasMany(AnswerChoice::class);
     }
 
+    
+
 }

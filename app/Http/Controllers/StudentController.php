@@ -89,4 +89,23 @@ class StudentController extends Controller
         return view('students-list', compact('students'));
     }
     
+    public function destroy($userId){
+        $user = User::findOrFail($userId);
+        $submissions = $user->submissions;
+
+        // Eliminar las respuestas de las presentaciones
+        foreach ($submissions as $submission) {
+            foreach ($submission->answerChoices as $answer) {
+                $answer->submission->delete();
+                $answer->choice->delete();
+                $answer->delete();
+            }
+            $submission->delete();
+        }
+    
+        // Eliminar las presentaciones  
+        $user->teachers()->detach();
+        $user->delete();
+        return redirect()->route('students.list')->with('success', 'Estudiante eliminado exitosamente.');
+    }
 }

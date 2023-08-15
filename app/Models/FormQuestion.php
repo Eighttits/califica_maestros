@@ -22,4 +22,6 @@ class FormQuestion extends Model
     {
         return $this->hasMany(MultipleChoice::class);
     }
+
+
 }

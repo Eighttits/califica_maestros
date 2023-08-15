@@ -58,18 +58,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/add-student', 'App\Http\Controllers\StudentController@viewAddStudent')->name('add-student')->middleware('can:admin');
     Route::post('/register-student', 'App\Http\Controllers\StudentController@addStudent')->name('register-student')->middleware('can:admin');
     Route::get('/create-form', 'App\Http\Controllers\AdminController@showCreateForm')->name('create-form');
-    Route::post('/admin.save-form', 'App\Http\Controllers\AdminController@createForm')->name('admin.save-form')->middleware('can:admin');
+    Route::post('/admin.save-form', 'App\Http\Controllers\FormController@createForm')->name('admin.save-form')->middleware('can:admin');
     Route::get('/add-techer-student', 'App\Http\Controllers\AdminController@showAddTeachersForm')->name('add-techer-student')->middleware('can:admin');
-    Route::post('/user.add-teachers', 'App\Http\Controllers\AdminController@addTeachersToStudents')->name('user.add-teachers');
+    Route::post('/user.add-teachers', 'App\Http\Controllers\AdminController@addTeachersToStudents')->name('user.add-teachers')->middleware('can:admin');
     Route::get('/forms/{formId}/student', 'App\Http\Controllers\StudentController@showStudentForm')->name('forms.student-form');
     Route::post('/forms.submit/{form}', 'App\Http\Controllers\FormController@saveSubmitForm')->name('forms.submit');
     Route::get('/students', 'App\Http\Controllers\StudentController@showStudents')->name('students.list')->middleware('can:admin');
     Route::get('/forms', 'App\Http\Controllers\FormController@showForms')->name('forms.list')->middleware('can:admin');
     Route::get('/forms/{formId}/edit', 'App\Http\Controllers\FormController@editForm')->name('forms.edit')->middleware('can:admin');
-    Route::put('/forms/{formId}', 'App\Http\Controllers\FormController@updateForm')->name('forms.update');
-    Route::get('/forms/load-statistics', 'App\Http\Controllers\FormController@showFormSelection')->name('forms.statistics.select');
-    Route::get('/forms/{formId}/statistics', 'App\Http\Controllers\FormController@showStatistics')->name('forms.statistics');
-    Route::get('/forms/statistics', 'App\Http\Controllers\FormController@showViewFormSelection')->name('forms.statistics.choices');
+    Route::put('/forms/{formId}', 'App\Http\Controllers\FormController@updateForm')->name('forms.update')->middleware('can:admin');
+    Route::get('/forms/load-statistics', 'App\Http\Controllers\FormController@showFormSelection')->name('forms.statistics.select')->middleware('can:admin');
+    Route::get('/forms/{formId}/statistics', 'App\Http\Controllers\FormController@showStatistics')->name('forms.statistics')->middleware('can:admin');
+    Route::get('/forms/statistics', 'App\Http\Controllers\FormController@showViewFormSelection')->name('forms.statistics.choices')->middleware('can:admin');
+    Route::post('/forms/destroy/{formId}', 'App\Http\Controllers\FormController@destroy')->name('forms.destroy')->middleware('can:admin');
+    Route::post('/students/destroy/{studentId}', 'App\Http\Controllers\StudentController@destroy')->name('students.destroy')->middleware('can:admin');
+    // Route::resource('forms', 'App\Http\Controllers\FormController');
 });
 
 

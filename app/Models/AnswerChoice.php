@@ -19,7 +19,7 @@ class AnswerChoice extends Model
     }
     public function choice()
     {
-        return $this->belongTo(MultiChoice::class);
+        return $this->belongTo(MultipleChoice::class);
     }
 
 }
