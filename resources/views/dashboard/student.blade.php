@@ -24,7 +24,7 @@
 
                         @foreach ($formsWithSubmission as $formW)
                         <a href="{{ route('forms.student-form', ['formId' => $formW->id]) }}">
-                            <div class="bg-green-300 hover:bg-green-600 focus:bg-green-600 font-semibold text-white p-4 rounded-lg">
+                            <div class="bg-green-500 hover:bg-green-600 focus:bg-green-600 font-semibold text-white p-4 rounded-lg">
                                 
                                     {{ $formW->title }} (Contestado)
                                
